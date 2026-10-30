@@ -81,3 +81,4 @@ Notes:
   storage, separate from Safari, so stations added in Safari don't carry over; set them up in the installed app, or
   hardcode them as a preset in `config.js`.
 - To remove it, delete it like any other app (long-press the icon). This also deletes its stored settings.
+- To make new presets, use [Schlieren, Spital Limmattal](https://transport.opendata.ch/v1/locations?type=station&query=schlieren,spitallimattal), replacing the station name at the end of the url.
