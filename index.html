@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <!-- Only this site and the transport API may be contacted; everything else is blocked by the browser. -->
+  <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self'; connect-src 'self' https://transport.opendata.ch; img-src 'self' data:; style-src 'self';
+                 script-src 'self'; manifest-src 'self'; worker-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <meta name="referrer" content="no-referrer">
+  <meta name="theme-color" content="#0b0b0a">
+  <meta name="description" content="Next public transport departures in Zürich">
+  <title>Departures</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon-192.png" type="image/png">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <link rel="stylesheet" href="style.css">
+  <script type="module" src="app.js"></script>
+</head>
+<body>
+  <!-- Vehicle pictograms, referenced with <use href="#i-…">. Drawn for this app, no icon library. -->
+  <svg class="sprite" aria-hidden="true">
+    <symbol id="i-tram" viewBox="0 0 24 24">
+      <g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M8 2h8M12 2v3"/><rect x="5" y="5" width="14" height="13" rx="3"/><path d="M5 11h14"/>
+        <path d="M8 18l-2 4M16 18l2 4"/><circle cx="9" cy="14.5" r=".6"/><circle cx="15" cy="14.5" r=".6"/>
+      </g>
+    </symbol>
+    <symbol id="i-bus" viewBox="0 0 24 24">
+      <g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="4" y="3" width="16" height="15" rx="3"/><path d="M4 10h16M8 6h8"/>
+        <path d="M7 18v2.5M17 18v2.5"/><circle cx="8" cy="14" r=".6"/><circle cx="16" cy="14" r=".6"/>
+      </g>
+    </symbol>
+    <symbol id="i-train" viewBox="0 0 24 24">
+      <g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M6 17V7a5 5 0 0 1 5-5h2a5 5 0 0 1 5 5v10z"/><rect x="8.5" y="6" width="7" height="4" rx="1"/>
+        <circle cx="9" cy="14" r=".6"/><circle cx="15" cy="14" r=".6"/><path d="M8 17l-3 5M16 17l3 5M7 20h10"/>
+      </g>
+    </symbol>
+    <symbol id="i-boat" viewBox="0 0 24 24">
+      <g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M3 14h18l-3 5H6z"/><path d="M7 14V9h10v5M12 9V5"/><path d="M2 22c2-1 4-1 5 0s3 1 5 0 4-1 5 0 3 1 5 0"/>
+      </g>
+    </symbol>
+    <symbol id="i-funicular" viewBox="0 0 24 24">
+      <g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M2 21L22 9"/><path d="M6 17V9l10-6v8z"/><path d="M9 10l4-2.4"/>
+      </g>
+    </symbol>
+    <symbol id="i-cablecar" viewBox="0 0 24 24">
+      <g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M2 5l20-3M12 3.5V8"/><rect x="5" y="8" width="14" height="12" rx="2.5"/><path d="M5 13h14"/>
+      </g>
+    </symbol>
+    <symbol id="i-other" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="5" fill="none" stroke="currentColor" stroke-width="1.6"/>
+    </symbol>
+  </svg>
+
+  <div class="wrap">
+    <header class="top">
+      <div>
+        <h1 class="title">Departures</h1>
+        <p id="subtitle" class="subtitle"></p>
+      </div>
+      <time id="clock" class="clock">--:--</time>
+    </header>
+
+    <main>
+      <section class="board" aria-live="polite" aria-label="Next departures">
+        <div class="row head" aria-hidden="true">
+          <span></span><span>Line</span><span>Destination</span><span class="r">Time</span><span class="r">In</span>
+        </div>
+        <ol id="rows" class="rows"></ol>
+        <p id="message" class="message" hidden></p>
+      </section>
+
+      <button id="refresh" class="refresh" type="button">Next departures</button>
+      <p id="status" class="status"></p>
+
+      <details class="settings">
+        <summary>Stations</summary>
+        <label class="field">
+          <span>List</span>
+          <select id="preset"></select>
+        </label>
+        <ul id="chips" class="chips"></ul>
+        <div class="search">
+          <input id="search" type="search" placeholder="Add a stop…" autocomplete="off" spellcheck="false"
+                 aria-label="Search for a stop" aria-controls="suggestions">
+          <ul id="suggestions" class="suggestions" role="listbox" hidden></ul>
+        </div>
+      </details>
+    </main>
+
+    <footer class="foot">Timetable data: opentransportdata.swiss · via transport.opendata.ch</footer>
+  </div>
+</body>
+</html>
