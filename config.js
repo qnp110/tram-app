@@ -57,7 +57,7 @@ export const CONFIG = {
      * automatically for contrast) or an object { bg, fg }. Lines without an entry get the amber outline style.
      */
     lineColors: {
-        // "4": "#18286B",
-        // "13": { bg: "#F6C442", fg: "#000000" },
+        "4": "#18286B",
+        "13": { bg: "#F6C442", fg: "#000000" },
     },
 };
